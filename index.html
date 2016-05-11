@@ -312,11 +312,11 @@ function enableAB(enabled) {
 	if(enabled) {
 		checkboxAB.checked = true
 		checkAB = true;
-		toastr["success"]("A-B loop started<br/>(A,B) = (" + ABa + "," + ABb + ")", "A-B loop");
+		toastr["success"]("A-B loop on<br/>(A,B) = (" + ABa + "," + ABb + ")", "A-B loop");
 	} else {
 		checkboxAB.checked = false;
 		checkAB = false;
-		toastr["warning"]("A-B loop stopped", "A-B loop")
+		toastr["warning"]("A-B loop off", "A-B loop")
 	}
 }
 
