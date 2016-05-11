@@ -15,14 +15,12 @@ h1 {
     color: #FF8C05;
 }
 
-#vid_container{
+#page_container{
 	display: inline-table;
-	padding: 0px;
-	margin: 0px;
 }
 
-#vid, #control_block, .sep_tab {
-	display: table-cell;
+.column {
+	vertical-align: top;
 }
 
 #vid {
@@ -35,7 +33,15 @@ h1 {
 
 #control_block {
 	vertical-align: top;
-	width: 40%;
+	height: 40vh;
+	background: white;
+}
+
+#subtitle_container {
+	vertical-align: top;
+	width: 40vw;
+	height: 80vh;
+	background:white;
 }
 
 .control_unit {
@@ -62,20 +68,32 @@ button {
 </head>
 <input id="video-file" type="file" name="files" style="position:absolute; top:-100px;">
 <h1>Online Subtitle Tools</h1>
-<div id="vid_container">
-	<video id="vid" controls>
-		<source id="video_src">
-		Your browser does not support HTML5 video.
-	</video>
-	<div class="sep_tab"></div>
-	<div id="control_block">
-		<div class="control_unit">
-			<p>Video Source</p>
-			<button id="load_local_btn">Local File</button>
-			<button id="load_url_btn" onclick="loadUrlPrompt();">From URL</button>
+<table id="page_container">
+<tr>
+	<td class="column">
+		<div id="vid_and_tool">
+			<video id="vid" controls>
+				<source id="video_src">
+				Your browser does not support HTML5 video.
+			</video>
 		</div>
-	</div>
-</div>
+		<div id="control_block">
+			<div class="control_unit">
+				<p>Video Source</p>
+				<button id="load_local_btn">Local File</button>
+				<button id="load_url_btn" onclick="loadUrlPrompt();">From URL</button>
+			</div>
+		</div>
+
+	</td>
+	<td class="column sep_tab"></td>
+	<td class="column">
+		<div id="subtitle_container">
+		</div>
+	</td>
+</tr>
+ </table>
+
 <script>
 var vid_size_ratio = 0.4;
 
