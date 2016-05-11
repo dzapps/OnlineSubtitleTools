@@ -220,6 +220,9 @@ function loadVideo(url) {
 	document.getElementById("video_src").src = url;
 	vid.load();
 }
+vid.onloadedmetadata = function() {
+	toastr["success"]("Successfully loaded", "Video");
+}
 
 //setup customized input buttons
 var local_btn = document.getElementById("load_local_btn");
