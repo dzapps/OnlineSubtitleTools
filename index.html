@@ -20,25 +20,20 @@ h1 {
 	margin: 0px;
 }
 
-#vid_a_info {
+#vid_a_info, #control_block, .sep_tab {
 	display: table-cell;
+}
+
+#vid_a_info {
 	background: black;
 }
 
-#vid_info {
-	text-align: center;
-	color: white;
-}
-
-
 .sep_tab {
-	display: table-cell;
 	width: 30px;
 }
 
 #control_block {
 	vertical-align: top;
-	display: table-cell;
 	width: 40%;
 }
 
@@ -64,7 +59,7 @@ button {
 
 </style>
 </head>
-
+<input id="video-file" type="file" name="files" style="position:absolute; top:-100px;">
 <h1>Online Subtitle Tools</h1>
 <div id="vid_container">
 	<div id="vid_a_info">
@@ -78,12 +73,9 @@ button {
 		<div class="control_unit">
 			<p>Video Source</p>
 			<button id="load_local_btn">Local File</button>
-			<input id="video-file" type="file" name="files" style="display: none;">
 		</div>
 	</div>
 </div>
-
-<script src="./upclick.js"></script>
 
 <script>
 var vid_size_ratio = 0.4;
@@ -97,17 +89,15 @@ var vid = document.getElementById("vid");
 vid.width=screen.width*vid_size_ratio;
 vid.height=screen.height*vid_size_ratio;
 
-//setup upclick button
+//setup customized input buttons
 var local_btn = document.getElementById("load_local_btn");
-upclick({
-      element: local_btn,
-      action: null,
-	onstart:function(filename) {
-		//loadVideo(filename);
-		var txt=document.getElementById("video-file").files[0];
-		console.log(txt);
-	}
-});
+var input = document.getElementById("video-file");
+local_btn.onclick = function(){
+	input.click();
+};
+input.onchange = function(){
+	loadVideo(URL.createObjectURL(input.files[0]));
+}
 </script> 
 
 </body> 
