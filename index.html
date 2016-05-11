@@ -33,8 +33,8 @@ h1 {
 
 #control_block {
 	vertical-align: top;
-	height: 40vh;
-	background: white;
+	height: 35vh;
+	margin-top: 10px;
 }
 
 #subtitle_container {
@@ -50,17 +50,6 @@ h1 {
 	background:white;
 }
 
-.control_unit {
-	display: block;
-	text-align: left;
-	padding: 5px;
-	background: white;
-	box-shadow: 3px 3px 10px #888888;
-}
-.control_unit > p {
-	margin: 5px;
-}
-
 button {
 	padding: 5px 20px;
   	background: #0099CC;
@@ -68,6 +57,88 @@ button {
 	border-radius: 4px;
 	color: white;
 	outline: none;
+}
+
+/* tab */
+#control_block p {
+	text-align: left;
+	margin: 3px;
+}
+#control_block input {
+	height: 2.5em;
+	visibility: hidden;
+}
+
+#control_block label {
+	background: #f9f9f9;
+	border-radius: .25em .25em 0 0;
+	color: #888;
+	cursor: pointer;
+	display: block;
+	float: left;
+	font-size: 1em;
+	height: 2.5em;
+	line-height: 2.5em;
+	margin-right: .25em;
+	padding: 0 1.5em;
+	text-align: center;
+}
+
+#control_block input:hover + label {
+	background: #ddd;
+	color: #666;
+}
+
+#control_block input:checked + label {
+	background: #e1e1e1;
+	color: #444;
+	position: relative;
+	z-index: 6;
+}
+
+#content {
+	text-align: left;
+	background: #f1f1f1;
+	border-radius: 0 .25em .25em .25em;
+	border-color:#e1e1e1;
+	border-style:solid;
+	min-height: 90%;
+	position: relative;
+	width: 100%;
+	z-index: 5;
+	overflow: auto;
+}
+
+.tab {
+	opacity: 0;
+	padding: 0.5em 1em 0.5em 1em;
+	position: absolute;
+	width: 90%;
+	height: 90%;
+	z-index: -100;
+}
+
+.control_unit {
+	padding: 5px 10px 5px 10px;
+	margin-bottom: 10px;
+	border-left:4px solid #00CC88;
+	background: white;
+}
+
+.control_unit p{
+	font-weight: bold;
+	/*color: #00CC88;*/
+}
+
+#control_block input#tab-source:checked ~ #content #content-source,
+#control_block input#tab-2:checked ~ #content #content-2,
+#control_block input#tab-3:checked ~ #content #content-3 {
+	opacity: 1;
+	z-index: 100;
+}
+
+input.visible {
+	visibility: visible !important;
 }
 
 </style>
@@ -84,10 +155,35 @@ button {
 			</video>
 		</div>
 		<div id="control_block">
-			<div class="control_unit">
-				<p>Video Source</p>
-				<button id="load_local_btn">Local File</button>
-				<button id="load_url_btn" onclick="loadUrlPrompt();">From URL</button>
+			<input id="tab-source" type="radio" name="tab-group" checked="checked" /><label for="tab-source">Source</label>
+			<input id="tab-2" type="radio" name="tab-group" /><label for="tab-2">Tab 2</label>
+			<input id="tab-3" type="radio" name="tab-group" /><label for="tab-3">Tab 3</label>
+			<div id="content">
+				<div class="tab" id="content-source">
+					<div class="control_unit">
+						<p>Load Video</p>
+						<button id="load_local_btn">Local Video</button>
+						<button id="load_url_btn" onclick="loadUrlPrompt();">From URL</button>
+					</div>
+					<div class="control_unit">
+						<p>Load Subtitle</p>
+						<button id="load_subtitle_srt_btn">srt</button>
+						<button id="load_subtitle_ass_btn">ass</button>
+						<button id="load_subtitle_sbv_btn">sbv</button>
+					</div>
+					<div class="control_unit">
+						<p>Save Subtitle</p>
+						<button id="save_subtitle_srt_btn">srt</button>
+						<button id="save_subtitle_ass_btn">ass</button>
+						<button id="save_subtitle_sbv_btn">sbv</button>
+					</div>
+				</div>
+				<div class="tab" id="content-2">
+					<p>empty</p>
+				</div>
+				<div class="tab" id="content-3">
+					<p>empty</p>
+				</div>
 			</div>
 		</div>
 
