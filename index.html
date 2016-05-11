@@ -2,6 +2,7 @@
 <html> 
 <body> 
 <head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 
 <style>
 body {
@@ -24,7 +25,7 @@ h1 {
 	display: table-cell;
 }
 
-#vid_a_info {
+#vid {
 	background: black;
 }
 
@@ -64,7 +65,7 @@ button {
 <div id="vid_container">
 	<div id="vid_a_info">
 		<video id="vid" controls>
-		<source id="mp4_src" type="video/mp4">
+		<source id="video_src">
 		Your browser does not support HTML5 video.
 		</video>
 	</div>
@@ -73,15 +74,15 @@ button {
 		<div class="control_unit">
 			<p>Video Source</p>
 			<button id="load_local_btn">Local File</button>
+			<button id="load_url_btn" onclick="loadUrlPrompt();">From URL</button>
 		</div>
 	</div>
 </div>
-
 <script>
 var vid_size_ratio = 0.4;
 
 function loadVideo(url) {
-	document.getElementById("mp4_src").src = url;
+	document.getElementById("video_src").src = url;
 	document.getElementById("vid").load();
 } 
 
@@ -98,6 +99,14 @@ local_btn.onclick = function(){
 input.onchange = function(){
 	loadVideo(URL.createObjectURL(input.files[0]));
 }
+
+function loadUrlPrompt() {
+	var url = prompt("Please enter the URL", "");
+	if (url != null)
+		loadVideo(encodeURI(url));
+}
+
+
 </script> 
 
 </body> 
