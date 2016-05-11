@@ -1,1 +1,110 @@
-test
+<!DOCTYPE html> 
+<html> 
+<body> 
+<head>
+<style>
+body {
+	background-color: linen;
+	text-align: center;
+}
+
+h1 {
+    text-align: center;
+    color: #FF8C05;
+}
+
+#vid_container{
+	display: inline-table;
+	padding: 0px;
+	margin: 0px;
+}
+
+#vid_a_info {
+	display: table-cell;
+	background: black;
+}
+
+#vid_info {
+	text-align: center;
+	color: white;
+}
+
+
+.sep_tab {
+	display: table-cell;
+	width: 30px;
+}
+
+#control_block {
+	vertical-align: top;
+	display: table-cell;
+	width: 40%;
+}
+
+.control_unit {
+	display: block;
+	text-align: left;
+	padding: 5px;
+	background: white;
+	box-shadow: 3px 3px 10px #888888;
+}
+
+button {
+	padding: 5px 20px;
+  	background: #0099CC;
+	border: none;
+	border-radius: 4px;
+	color: white;
+	outline: none;
+}
+
+p {
+	display: block;
+}
+
+</style>
+</head>
+
+<h1>Online Subtitle Tools</h1>
+
+<div id="vid_container">
+	<div id="vid_a_info">
+		<div id="vid_info">
+			<p><font id="vid_src_txt" color="red">not loaded</font></p>
+		</div>
+		<video id="vid" controls>
+		<source id="mp4_src" type="video/mp4">
+		Your browser does not support HTML5 video.
+		</video>
+	</div>
+	<div class="sep_tab"></div>
+	<div id="control_block">
+		<div class="control_unit">
+			<p>Video Source</p>
+			<button id="load_btn" onclick="loadVideo('file:///Users/landicefu/Desktop/484393189.919402.mp4');">Load</button>
+		</div>
+	</div>
+</div>
+
+<script> 
+var vid_size_ratio = 0.4;
+
+function loadVideo(url) { 
+	document.getElementById("mp4_src").src = url;
+	document.getElementById("vid").load();
+} 
+
+var vid = document.getElementById("vid");
+vid.width=screen.width*vid_size_ratio;
+vid.height=screen.height*vid_size_ratio;
+
+vid.onloadedmetadata = function() {
+	var src_txt = document.getElementById("vid_src_txt")
+	src_txt.innerHTML = this.currentSrc;
+	src_txt.color = "#00FF00";
+};
+
+</script> 
+
+</body> 
+</html>
