@@ -2,6 +2,7 @@
 <html> 
 <body> 
 <head>
+
 <style>
 body {
 	background-color: linen;
@@ -65,7 +66,6 @@ button {
 </head>
 
 <h1>Online Subtitle Tools</h1>
-
 <div id="vid_container">
 	<div id="vid_a_info">
 		<video id="vid" controls>
@@ -77,10 +77,13 @@ button {
 	<div id="control_block">
 		<div class="control_unit">
 			<p>Video Source</p>
-			<button id="load_btn" onclick="loadVideo('file:///Users/landicefu/Desktop/484393189.919402.mp4');">Load</button>
+			<button id="load_local_btn">Local File</button>
+			<input id="video-file" type="file" name="files" style="display: none;">
 		</div>
 	</div>
 </div>
+
+<script src="./upclick.js"></script>
 
 <script>
 var vid_size_ratio = 0.4;
@@ -93,6 +96,18 @@ function loadVideo(url) {
 var vid = document.getElementById("vid");
 vid.width=screen.width*vid_size_ratio;
 vid.height=screen.height*vid_size_ratio;
+
+//setup upclick button
+var local_btn = document.getElementById("load_local_btn");
+upclick({
+      element: local_btn,
+      action: null,
+	onstart:function(filename) {
+		//loadVideo(filename);
+		var txt=document.getElementById("video-file").files[0];
+		console.log(txt);
+	}
+});
 </script> 
 
 </body> 
