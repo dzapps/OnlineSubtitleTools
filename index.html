@@ -16,7 +16,7 @@ h1 {
 }
 
 #page_container{
-	display: inline-table;
+	display: inline-block;
 }
 
 .column {
@@ -38,9 +38,15 @@ h1 {
 }
 
 #subtitle_container {
-	vertical-align: top;
-	width: 40vw;
-	height: 80vh;
+	position: relative;
+	height:auto;
+	width:40vw;
+}
+
+#subtitle {
+	position:absolute;
+	height:100%;
+	width:100%;
 	background:white;
 }
 
@@ -87,8 +93,8 @@ button {
 
 	</td>
 	<td class="column sep_tab"></td>
-	<td class="column">
-		<div id="subtitle_container">
+	<td id="subtitle_container" class="column">
+		<div id="subtitle">
 		</div>
 	</td>
 </tr>
