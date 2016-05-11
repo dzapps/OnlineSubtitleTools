@@ -21,7 +21,7 @@ h1 {
 	margin: 0px;
 }
 
-#vid_a_info, #control_block, .sep_tab {
+#vid, #control_block, .sep_tab {
 	display: table-cell;
 }
 
@@ -63,12 +63,10 @@ button {
 <input id="video-file" type="file" name="files" style="position:absolute; top:-100px;">
 <h1>Online Subtitle Tools</h1>
 <div id="vid_container">
-	<div id="vid_a_info">
-		<video id="vid" controls>
+	<video id="vid" controls>
 		<source id="video_src">
 		Your browser does not support HTML5 video.
-		</video>
-	</div>
+	</video>
 	<div class="sep_tab"></div>
 	<div id="control_block">
 		<div class="control_unit">
@@ -103,7 +101,7 @@ input.onchange = function(){
 function loadUrlPrompt() {
 	var url = prompt("Please enter the URL", "");
 	if (url != null)
-		loadVideo(encodeURI(url));
+		loadVideo(encodeURI(url))	;
 }
 
 
