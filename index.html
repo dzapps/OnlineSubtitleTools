@@ -69,9 +69,6 @@ p {
 
 <div id="vid_container">
 	<div id="vid_a_info">
-		<div id="vid_info">
-			<p><font id="vid_src_txt" color="red">not loaded</font></p>
-		</div>
 		<video id="vid" controls>
 		<source id="mp4_src" type="video/mp4">
 		Your browser does not support HTML5 video.
@@ -86,10 +83,10 @@ p {
 	</div>
 </div>
 
-<script> 
+<script>
 var vid_size_ratio = 0.4;
 
-function loadVideo(url) { 
+function loadVideo(url) {
 	document.getElementById("mp4_src").src = url;
 	document.getElementById("vid").load();
 } 
@@ -97,13 +94,6 @@ function loadVideo(url) {
 var vid = document.getElementById("vid");
 vid.width=screen.width*vid_size_ratio;
 vid.height=screen.height*vid_size_ratio;
-
-vid.onloadedmetadata = function() {
-	var src_txt = document.getElementById("vid_src_txt")
-	src_txt.innerHTML = this.currentSrc;
-	src_txt.color = "#00FF00";
-};
-
 </script> 
 
 </body> 
