@@ -2,8 +2,10 @@
 <html> 
 <body> 
 <head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="toggle_button.css">
+	<script src="toastr.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="toastr.min.css">
 <style>
 body {
 	background-color: linen;
@@ -64,7 +66,8 @@ button {
 	text-align: left;
 	margin: 3px;
 }
-#control_block input {
+
+input.tab_head {
 	height: 2.5em;
 	visibility: hidden;
 }
@@ -84,12 +87,12 @@ button {
 	text-align: center;
 }
 
-#control_block input:hover + label {
+#control_block input.tab_head:hover + label.tab_head {
 	background: #ddd;
 	color: #666;
 }
 
-#control_block input:checked + label {
+#control_block input.tab_head:checked + label.tab_head {
 	background: #e1e1e1;
 	color: #444;
 	position: relative;
@@ -155,9 +158,9 @@ input.visible {
 			</video>
 		</div>
 		<div id="control_block">
-			<input id="tab-source" type="radio" name="tab-group" checked="checked" /><label for="tab-source">Source</label>
-			<input id="tab-control" type="radio" name="tab-group" /><label for="tab-control">Control</label>
-			<input id="tab-3" type="radio" name="tab-group" /><label for="tab-3">Tab 3</label>
+			<input id="tab-source" class="tab_head" type="radio" name="tab-group" checked="checked" /><label class="tab_head" for="tab-source">Source</label>
+			<input id="tab-control" class="tab_head" type="radio" name="tab-group" /><label class="tab_head" for="tab-control">Control</label>
+			<input id="tab-3" class="tab_head" type="radio" name="tab-group" /><label class="tab_head" for="tab-3">Tab 3</label>
 			<div id="content">
 				<div class="tab" id="content-source">
 					<div class="control_unit">
@@ -181,10 +184,14 @@ input.visible {
 				<div class="tab" id="content-control">
 					<div class="control_unit">
 						<p>A-B loop</p>
-						<button id="load_subtitle_srt_btn">srt</button>
-						<button id="loop_set_a_btn">Set A</button>
-						<button id="loop_set_b_btn">Set B</button>
-						<button id="loop_clear_btn">Clear</button>
+						<div class="toggle" style="display:inline-block;">
+							<input id="ab_enabled_checkbox" type="checkbox" disabled/>
+							<span class="btn"></span>
+							<span class="bg"></span>
+						</div>
+						<button id="loop_set_a_btn" onclick="OnClickABSetA();">Set A</button>
+						<button id="loop_set_b_btn" onclick="OnClickABSetB();">Set B</button>
+						<button id="loop_clear_btn" onclick="OnClickABClear();">Clear</button>
 					</div>
 				</div>
 				<div class="tab" id="content-3">
@@ -205,14 +212,14 @@ input.visible {
 <script>
 var vid_size_ratio = 0.4;
 
-function loadVideo(url) {
-	document.getElementById("video_src").src = url;
-	document.getElementById("vid").load();
-} 
-
 var vid = document.getElementById("vid");
 vid.width=screen.width*vid_size_ratio;
 vid.height=screen.height*vid_size_ratio;
+
+function loadVideo(url) {
+	document.getElementById("video_src").src = url;
+	vid.load();
+}
 
 //setup customized input buttons
 var local_btn = document.getElementById("load_local_btn");
@@ -230,6 +237,85 @@ function loadUrlPrompt() {
 		loadVideo(encodeURI(url))	;
 }
 
+var ABa=-1;
+var ABb=-1;
+var checkAB=false;
+var btnSetA = document.getElementById("loop_set_a_btn");
+var btnSetB = document.getElementById("loop_set_b_btn");
+var checkboxAB = document.getElementById("ab_enabled_checkbox");
+function OnClickABSetA() {
+	if (vid.readyState == 0) {
+		toastr["error"]("Please load the video first", "Video not loaded");
+		return;
+	}
+
+	if (ABb == vid.currentTime) {
+		toastr["error"]("Please set a different time than Time B");
+		return;
+	}
+
+	ABa = vid.currentTime;
+	btnSetA.style.backgroundColor = "#A5C04D";
+	toastr["info"]("Time A set", "A-B loop")
+	CheckABSetting();
+}
+
+function OnClickABSetB() {
+	if (vid.readyState == 0) {
+		toastr["error"]("Please load the video first", "Video not loaded");
+		return;
+	}
+
+	if (ABa == vid.currentTime) {
+		toastr["error"]("Please set a different time than Time A");
+		return;
+	}
+
+	ABb = vid.currentTime;
+	btnSetB.style.backgroundColor = "#A5C04D";
+	toastr["info"]("Time B set", "A-B loop")
+	CheckABSetting();
+}
+
+function CheckABSetting() {
+	if (ABa == -1) return;
+	if (ABb == -1) return;
+
+	var temp;
+	if (ABb < ABa) {
+		temp=ABb;
+		ABb = ABa;
+		ABa = temp;
+	}
+
+	checkboxAB.removeAttribute("disabled");
+	enableAB(true);
+}
+
+function OnClickABClear() {
+	ABa = -1;
+	ABb = -1;
+	btnSetA.style.backgroundColor = "#0099CC";
+	btnSetB.style.backgroundColor = "#0099CC";
+	enableAB(false);
+	checkboxAB.setAttribute("disabled", null);
+}
+
+checkboxAB.onchange = function() {
+	enableAB(this.checked);
+}
+
+function enableAB(enabled) {
+	if(enabled) {
+		checkboxAB.checked = true
+		checkAB = true;
+		toastr["success"]("A-B loop started", "A-B loop");
+	} else {
+		checkboxAB.checked = false;
+		checkAB = false;
+		toastr["warning"]("A-B loop stopped", "A-B loop")
+	}
+}
 
 </script> 
 
