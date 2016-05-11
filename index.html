@@ -131,7 +131,7 @@ button {
 }
 
 #control_block input#tab-source:checked ~ #content #content-source,
-#control_block input#tab-2:checked ~ #content #content-2,
+#control_block input#tab-control:checked ~ #content #content-control,
 #control_block input#tab-3:checked ~ #content #content-3 {
 	opacity: 1;
 	z-index: 100;
@@ -156,7 +156,7 @@ input.visible {
 		</div>
 		<div id="control_block">
 			<input id="tab-source" type="radio" name="tab-group" checked="checked" /><label for="tab-source">Source</label>
-			<input id="tab-2" type="radio" name="tab-group" /><label for="tab-2">Tab 2</label>
+			<input id="tab-control" type="radio" name="tab-group" /><label for="tab-control">Control</label>
 			<input id="tab-3" type="radio" name="tab-group" /><label for="tab-3">Tab 3</label>
 			<div id="content">
 				<div class="tab" id="content-source">
@@ -178,11 +178,17 @@ input.visible {
 						<button id="save_subtitle_sbv_btn">sbv</button>
 					</div>
 				</div>
-				<div class="tab" id="content-2">
-					<p>empty</p>
+				<div class="tab" id="content-control">
+					<div class="control_unit">
+						<p>A-B loop</p>
+						<button id="load_subtitle_srt_btn">srt</button>
+						<button id="loop_set_a_btn">Set A</button>
+						<button id="loop_set_b_btn">Set B</button>
+						<button id="loop_clear_btn">Clear</button>
+					</div>
 				</div>
 				<div class="tab" id="content-3">
-					<p>empty</p>
+					<p>subtitle</p>
 				</div>
 			</div>
 		</div>
