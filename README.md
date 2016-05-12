@@ -1,4 +1,18 @@
 # OnlineSubtitleTools
 Provides some linear and non-linear time mapping methods to remap the sentences to correct time on the web.
-
 http://landicefu.github.io/OnlineSubtitleTools/
+
+Need help!
+Hi, I'm not really familar with Javascript and front-end design.
+If you also love to watch movies and TV series and happen to know web design, please help me with this project :)
+
+Todo list (with priority):
+- load/export srt subtitle
+- [language] chs to cht ; cht to chs
+- load/export ass subtitle
+- load/export sbv subtitle
+- load youtube video
+- load google drive video
+- subtitle offset
+- linear adjustment
+- multiple segment linear adjustment
