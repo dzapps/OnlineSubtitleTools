@@ -7,7 +7,7 @@
 	<script src="toastr.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="toastr.min.css">
 	<script type="text/javascript" src="./google_drive.js"></script>
-	<script type="text/javascript" src="https://apis.google.com/js/api.js?onload=loadPicker"></script>
+	<script src="https://apis.google.com/js/client.js?onload=loadApi"></script>
 <style>
 body {
 	background-color: linen;
@@ -169,7 +169,7 @@ input.visible {
 						<p>Load Video</p>
 						<button id="load_local_btn">Local Video</button>
 						<button id="load_url_btn" onclick="loadUrlPrompt();">From URL</button>
-						<button id="load_gdrive_btn" onclick="loadGoogleDrive();">Google Drive</button>
+						<button id="load_gdrive_btn" onclick="handleAuthClick();">Google Drive</button>
 						<button id="load_gdrive_btn" onclick="signoutGoogleDrive();">Sign Out</button>
 					</div>
 					<div class="control_unit">
@@ -363,34 +363,27 @@ function signoutGoogleDrive() {
 	oauthToken = undefined;
 }
 
-function loadGoogleDrive() {
-	if (!authApiLoaded || !pickerApiLoaded) {
-		toastr["error"]("Please try again few seconds later.", "API still loading");
-		return;
-	}
-
-	if (oauthToken) {
-		createPicker();
-	} else {
-		toastr["info"]("A window might popup for you to authorize this website to access video from your Google Drive. Please make sure window popup is allowed for this site.", "Allow Popup");
-		window.gapi.auth.authorize(
-		{
-			'client_id': clientId,
-			'scope': scope,
-			'immediate': false
-		}, handleAuthResult);
-	}
+function showPicker() {
+	if (pickerApiLoaded && oauthToken) {
+        var picker = new google.picker.PickerBuilder()
+            .setAppId(APP_ID)
+            .setOAuthToken(oauthToken)
+            .addView(new google.picker.DocsView().setIncludeFolders(true).setOwnedByMe(true))
+            .addView(new google.picker.View(google.picker.ViewId.DOCS_VIDEOS))
+            .setCallback(pickerCallback)
+            .build();
+         picker.setVisible(true);
+      } else {
+      	toastr["error"]("Please try again few seconds later.", "API still loading");
+      }
 }
 
-function handleAuthResult(authResult) {
-	if (authResult && !authResult.error) {
-		oauthToken = authResult.access_token;
-		createPicker();
-	} else {
-		toastr["error"]("Error! Failed to authorize this website to access your Google Drive", "Authorization Failure");
+var file;
+function pickerCallback(data) {
+	if (data.action == google.picker.Action.PICKED) {
+		file = data.docs[0];
 	}
 }
-
 </script> 
 
 </body> 

@@ -1,49 +1,63 @@
-    var developerKey = 'AIzaSyDvIRIT5rPQH_9SrQwLv1r3mL3CZ9P13lg';
-    var clientId = "217214554172-lk1ej0g02ga9nfi7fm8oamp72722fcoc.apps.googleusercontent.com"
-    var appId = "217214554172";
-    var scope = ['https://www.googleapis.com/auth/drive'];
+var CLIENT_ID = "217214554172-lk1ej0g02ga9nfi7fm8oamp72722fcoc.apps.googleusercontent.com";
+var APP_ID = "217214554172"
+var SCOPES = ['https://www.googleapis.com/auth/drive.readonly'];
 
-    var authApiLoaded = false;
-    var pickerApiLoaded = false;
-    var oauthToken;
+var pickerApiLoaded = false;
+var driveApiLoaded = false;
+var oauthToken = undefined;
 
-    // Use the Google API Loader script to load the google.picker script.
-    function loadPicker() {
-      gapi.load('auth', {'callback': onAuthApiLoad});
-      gapi.load('picker', {'callback': onPickerApiLoad});
+function handleAuthClick() {
+    toastr["info"]("A window might popup for you to authorize this website to access video from your Google Drive. Please make sure window popup is allowed for this site.", "Allow Popup");
+    gapi.auth.authorize({
+            client_id: CLIENT_ID,
+            scope: SCOPES,
+            immediate: false
+        },
+        handleAuthResult);
+    return false;
+}
+
+function handleAuthResult(authResult) {
+    if (authResult && !authResult.error) {
+        oauthToken = authResult.access_token;
+        showPicker();
+    } else {
+        toastr["error"]("Error! Failed to authorize this website to access your Google Drive", "Authorization Failure");
     }
+}
 
-    function onAuthApiLoad() {
-      authApiLoaded = true;
-    }
+function loadApi() {
+    gapi.client.load('drive', 'v3', onDriveApiLoad);
+    gapi.load('picker', {
+        'callback': onPickerApiLoad
+    });
+}
 
-    function onPickerApiLoad() {
-      pickerApiLoaded = true;
-    }
+function onPickerApiLoad() {
+    pickerApiLoaded = true;
+}
 
-    // Create and render a Picker object for searching images.
-    function createPicker() {
-      if (pickerApiLoaded && oauthToken) {
-        var view = new google.picker.View(google.picker.ViewId.DOCS_VIDEOS);
-        //view.setMimeTypes("image/png,image/jpeg,image/jpg");
-        var picker = new google.picker.PickerBuilder()
-            //.enableFeature(google.picker.Feature.NAV_HIDDEN)
-            //.enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-            .setAppId(appId)
-            .setOAuthToken(oauthToken)
-            .addView(view)
-            .addView(new google.picker.DocsView().setIncludeFolders(true).setOwnedByMe(true))
-            //.addView(new google.picker.DocsUploadView())
-            //.setDeveloperKey(developerKey)
-            .setCallback(pickerCallback)
-            .build();
-         picker.setVisible(true);
-      }
-    }
+function onDriveApiLoad() {
+    pickerApiLoaded = true;
+}
 
-function pickerCallback(data) {
-  if (data.action == google.picker.Action.PICKED) {
-    var fileId = data.docs[0].id;
-    alert('The user selected: ' + fileId);
-  }
+
+// Drive Api Example
+function listFiles() {
+    var request = gapi.client.drive.files.list({
+        'pageSize': 10,
+        'fields': "nextPageToken, files(id, name)"
+    });
+
+    request.execute(function(resp) {
+        var files = resp.files;
+        if (files && files.length > 0) {
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                console.log(file.name + ' (' + file.id + ')');
+            }
+        } else {
+            console.log('No files found.');
+        }
+    });
 }
