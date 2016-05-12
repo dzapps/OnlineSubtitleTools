@@ -169,6 +169,7 @@ input.visible {
 						<p>Load Video</p>
 						<button id="load_local_btn">Local Video</button>
 						<button id="load_url_btn" onclick="loadUrlPrompt();">From URL</button>
+						<button id="load_gdrive_btn" onclick="loadGoogleDrive();">Google Drive</button>
 					</div>
 					<div class="control_unit">
 						<p>Load Subtitle</p>
@@ -343,6 +344,40 @@ vid.onpause = function() {
 	clearInterval(intervalTaskHandle);
 }
 
+function loadGoogleDrive() {
+	if (!authApiLoaded || !pickerApiLoaded) {
+		toastr["error"]("Please try again few seconds later.", "API still loading");
+		return;
+	}
+
+	if (oauthToken) {
+		createPicker();
+	} else {
+		toastr["info"]("A window might popup for you to authorize this website to access video from your Google Drive. Please make sure window popup is allowed for this site.", "Allow Popup");
+		window.gapi.auth.authorize(
+		{
+			'client_id': clientId,
+			'scope': scope,
+			'immediate': false
+		}, handleAuthResult);
+	}
+}
+
+function handleAuthResult(authResult) {
+	if (authResult && !authResult.error) {
+		oauthToken = authResult.access_token;
+		createPicker();
+	} else {
+		toastr["error"]("Error! Failed to authorize this website to access your Google Drive", "Authorization Failure");
+	}
+}
+
+function pickerCallback(data) {
+	if (data.action == google.picker.Action.PICKED) {
+		var fileId = data.docs[0].id;
+		alert('The user selected: ' + fileId);
+	}
+}
 </script> 
 
 </body> 
