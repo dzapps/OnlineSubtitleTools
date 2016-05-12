@@ -24,7 +24,7 @@
     // Create and render a Picker object for searching images.
     function createPicker() {
       if (pickerApiLoaded && oauthToken) {
-        var view = new google.picker.View(google.picker.​ViewId.DOCS_VIDEOS);
+        var view = new google.picker.View(google.picker.ViewId.DOCS_VIDEOS);
         //view.setMimeTypes("image/png,image/jpeg,image/jpg");
         var picker = new google.picker.PickerBuilder()
             //.enableFeature(google.picker.Feature.NAV_HIDDEN)
@@ -32,6 +32,7 @@
             .setAppId(appId)
             .setOAuthToken(oauthToken)
             .addView(view)
+            .addView(new google.picker.DocsView().setIncludeFolders(true).setOwnedByMe(true))
             //.addView(new google.picker.DocsUploadView())
             //.setDeveloperKey(developerKey)
             .setCallback(pickerCallback)
@@ -39,3 +40,10 @@
          picker.setVisible(true);
       }
     }
+
+function pickerCallback(data) {
+  if (data.action == google.picker.Action.PICKED) {
+    var fileId = data.docs[0].id;
+    alert('The user selected: ' + fileId);
+  }
+}

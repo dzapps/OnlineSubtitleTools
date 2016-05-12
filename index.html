@@ -170,6 +170,7 @@ input.visible {
 						<button id="load_local_btn">Local Video</button>
 						<button id="load_url_btn" onclick="loadUrlPrompt();">From URL</button>
 						<button id="load_gdrive_btn" onclick="loadGoogleDrive();">Google Drive</button>
+						<button id="load_gdrive_btn" onclick="signoutGoogleDrive();">Sign Out</button>
 					</div>
 					<div class="control_unit">
 						<p>Load Subtitle</p>
@@ -344,6 +345,24 @@ vid.onpause = function() {
 	clearInterval(intervalTaskHandle);
 }
 
+function signoutGoogleDrive() {
+	
+	$.ajax({
+		type: 'GET',
+		url: "https://accounts.google.com/o/oauth2/revoke?token=" + oauthToken,
+		async: false,
+		contentType: "application/json",
+		dataType: 'jsonp',
+		success: function(nullResponse) {
+			toastr["success"]("Successfully revoked Google Drive authorization", "Google Drive");
+		},
+		error: function(e) {
+			toastr["error"]("Failed to revoke Google Drive authorization", "Google Drive");
+		}
+	});
+	oauthToken = undefined;
+}
+
 function loadGoogleDrive() {
 	if (!authApiLoaded || !pickerApiLoaded) {
 		toastr["error"]("Please try again few seconds later.", "API still loading");
@@ -372,12 +391,6 @@ function handleAuthResult(authResult) {
 	}
 }
 
-function pickerCallback(data) {
-	if (data.action == google.picker.Action.PICKED) {
-		var fileId = data.docs[0].id;
-		alert('The user selected: ' + fileId);
-	}
-}
 </script> 
 
 </body> 
