@@ -211,6 +211,7 @@ input.visible {
 
 <script>
 var vid_size_ratio = 0.4;
+var interval_period_periodical_video = 100;
 
 var vid = document.getElementById("vid");
 vid.width=screen.width*vid_size_ratio;
@@ -318,6 +319,26 @@ function enableAB(enabled) {
 		checkAB = false;
 		toastr["warning"]("A-B loop off", "A-B loop")
 	}
+}
+
+var intervalTaskHandle;
+
+function intervalTask() {
+	if (checkAB)	ABLoopCheck();
+}
+
+function ABLoopCheck() {
+	if (vid.currentTime > ABb)
+		vid.currentTime = ABa;
+}
+
+vid.onplay = function() {
+	clearInterval(intervalTaskHandle);
+	intervalTaskHandle = setInterval(intervalTask, interval_period_periodical_video);
+}
+
+vid.onpause = function() {
+	clearInterval(intervalTaskHandle);
 }
 
 </script> 
