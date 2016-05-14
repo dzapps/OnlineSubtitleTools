@@ -153,7 +153,8 @@ input.visible {
 
 </style>
 </head>
-<input id="video-file" type="file" name="files" style="position:absolute; top:-100px;">
+<input id="video-file" type="file" style="position:absolute; top:-100px;">
+<input id="subtitle-file" type="file" accept=".srt, .ass, .sbv" style="position:absolute; top:-100px;">
 <h1>Online Subtitle Tools</h1>
 <table id="page_container">
 <tr>
@@ -178,10 +179,8 @@ input.visible {
 						<button id="load_gdrive_btn" onclick="signoutGoogleDrive();">Sign Out</button>
 					</div>
 					<div class="control_unit">
-						<p>Load Subtitle</p>
-						<button id="load_subtitle_srt_btn">srt</button>
-						<button id="load_subtitle_ass_btn" disabled>ass</button>
-						<button id="load_subtitle_sbv_btn" disabled>sbv</button>
+						<p>Load Subtitle (srt, ass, sbv)</p>
+						<button id="load_subtitle_btn" onclick="subtitle_input.click();">Local File</button>
 					</div>
 					<div class="control_unit">
 						<p>Save Subtitle</p>
@@ -236,9 +235,56 @@ vid.onloadedmetadata = function() {
 
 //setup customized input buttons
 var video_input = document.getElementById("video-file");
+var subtitle_input = document.getElementById("subtitle-file");
 
 video_input.onchange = function(){
 	loadVideo(URL.createObjectURL(video_input.files[0]));
+}
+
+var loaded_subtitle_type = undefined;
+subtitle_input.onchange = function() {
+	var f = subtitle_input.files[0];
+	var filename = f.name;
+	loaded_subtitle_type = filename.substr(filename.lastIndexOf('.') + 1);
+	var fileReader = new FileReader();
+	fileReader.onload = function() {
+		toastr["success"]("Successfully loaded (" + loaded_subtitle_type + ")", "Load Subtitle");
+
+		var parser;
+		switch (loaded_subtitle_type) {
+			case 'srt':
+				parser = parseSubSrt;
+				break;
+			case 'ass':
+				parser = parseSubAss;
+				break;
+			case 'sbv':
+				parser = parseSubSbv;
+				break;
+		}
+		if (parser(this.result)) {
+			toastr["success"]("Subtitle Parsed", "Subtitle Parser");
+		} else {
+			toastr["error"]("Failed to parse " + filename + " as a " + loaded_subtitle_type + " file.", "Subtitle Parser");
+		}
+	}
+
+	fileReader.readAsText(f, 'UTF-8');
+}
+
+function parseSubSrt(content) {
+	console.log("Parsing srt");
+	return true;
+}
+
+function parseSubAss(content) {
+	console.log("Parsing ass");
+	return true;
+}
+
+function parseSubSbv(content) {
+	console.log("Parsing sbv");
+	return true;
 }
 
 function loadUrlPrompt() {
@@ -386,6 +432,7 @@ function pickerCallback(data) {
 		file = data.docs[0];
 	}
 }
+
 </script> 
 
 </body> 
