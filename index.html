@@ -63,6 +63,11 @@ button {
 	outline: none;
 }
 
+
+button:disabled {
+	color: #BBBBBB;
+}
+
 /* tab */
 #control_block p {
 	text-align: left;
@@ -167,7 +172,7 @@ input.visible {
 				<div class="tab" id="content-source">
 					<div class="control_unit">
 						<p>Load Video</p>
-						<button id="load_local_btn">Local Video</button>
+						<button id="load_local_btn" onclick="video_input.click();">Local Video</button>
 						<button id="load_url_btn" onclick="loadUrlPrompt();">From URL</button>
 						<button id="load_gdrive_btn" onclick="handleAuthClick();">Google Drive</button>
 						<button id="load_gdrive_btn" onclick="signoutGoogleDrive();">Sign Out</button>
@@ -175,14 +180,14 @@ input.visible {
 					<div class="control_unit">
 						<p>Load Subtitle</p>
 						<button id="load_subtitle_srt_btn">srt</button>
-						<button id="load_subtitle_ass_btn">ass</button>
-						<button id="load_subtitle_sbv_btn">sbv</button>
+						<button id="load_subtitle_ass_btn" disabled>ass</button>
+						<button id="load_subtitle_sbv_btn" disabled>sbv</button>
 					</div>
 					<div class="control_unit">
 						<p>Save Subtitle</p>
-						<button id="save_subtitle_srt_btn">srt</button>
-						<button id="save_subtitle_ass_btn">ass</button>
-						<button id="save_subtitle_sbv_btn">sbv</button>
+						<button id="save_subtitle_srt_btn" disabled>srt</button>
+						<button id="save_subtitle_ass_btn" disabled>ass</button>
+						<button id="save_subtitle_sbv_btn" disabled>sbv</button>
 					</div>
 				</div>
 				<div class="tab" id="content-control">
@@ -230,13 +235,10 @@ vid.onloadedmetadata = function() {
 }
 
 //setup customized input buttons
-var local_btn = document.getElementById("load_local_btn");
-var input = document.getElementById("video-file");
-local_btn.onclick = function(){
-	input.click();
-};
-input.onchange = function(){
-	loadVideo(URL.createObjectURL(input.files[0]));
+var video_input = document.getElementById("video-file");
+
+video_input.onchange = function(){
+	loadVideo(URL.createObjectURL(video_input.files[0]));
 }
 
 function loadUrlPrompt() {
