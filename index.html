@@ -274,6 +274,9 @@ subtitle_input.onchange = function() {
 
 function parseSubSrt(content) {
 	console.log("Parsing srt");
+	subtitle_content = content;
+	var pattern = /^ *\d+ *$\r?\n^ *(\d\d:\d\d:\d\d,\d\d\d) *--> *(\d\d:\d\d:\d\d,\d\d\d) *\r?\n(.*\r?\n)*?(?=(^ *\d+ *$))/gm;
+	var sentences = (subtitle_content+"\r\n1\r\n").match(pattern);
 	return true;
 }
 
