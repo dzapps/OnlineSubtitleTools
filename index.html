@@ -272,11 +272,20 @@ subtitle_input.onchange = function() {
 	fileReader.readAsText(f, 'UTF-8');
 }
 
+var subtitle_list=[];
 function parseSubSrt(content) {
 	console.log("Parsing srt");
-	subtitle_content = content;
+	var subtitle_content = content;
+	subtitle_content = subtitle_content.replace(/^\s*(?=\n)/gm, "");
 	var pattern = /^ *\d+ *$\r?\n^ *(\d\d:\d\d:\d\d,\d\d\d) *--> *(\d\d:\d\d:\d\d,\d\d\d) *\r?\n(.*\r?\n)*?(?=(^ *\d+ *$))/gm;
 	var sentences = (subtitle_content+"\r\n1\r\n").match(pattern);
+
+	var len = sentences.length;
+	for (var i=0;i<len;i++) {
+		subtitle_list[i] =
+			(/^ *\d+ *$\r?\n^ *(\d\d:\d\d:\d\d,\d\d\d) *--> *(\d\d:\d\d:\d\d,\d\d\d) *\r?\n((.*\r?\n)*)/gm)
+			.exec(sentences[i]);
+	}
 	return true;
 }
 
