@@ -285,8 +285,19 @@ function parseSubSrt(content) {
 		subtitle_list[i] =
 			(/^ *\d+ *$\r?\n^ *(\d\d:\d\d:\d\d,\d\d\d) *--> *(\d\d:\d\d:\d\d,\d\d\d) *\r?\n((.*\r?\n)*)/gm)
 			.exec(sentences[i]);
+		subtitle_list[i].splice(0,1);
+		subtitle_list[i].splice(3,1);
+		subtitle_list[i][0] = textTime2second(subtitle_list[i][0]);
+		subtitle_list[i][1] = textTime2second(subtitle_list[i][1]);
+		subtitle_list[i][2] = subtitle_list[i][2].substring(0, subtitle_list[i][2].length - 1);
 	}
 	return true;
+}
+
+function textTime2second(time) {
+	extract = /(\d\d):(\d\d):(\d\d),(\d\d\d)/.exec(time);
+	time = (parseInt(extract[1])*60+parseInt(extract[2]))*60+parseInt(extract[3]) + parseInt(extract[4])/1000;
+	return time;
 }
 
 function parseSubAss(content) {
