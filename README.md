@@ -1,6 +1,6 @@
 # OnlineSubtitleTools
 Provides some linear and non-linear time mapping methods to remap the sentences to correct time on the web.
-http://landicefu.github.io/OnlineSubtitleTools/
+https://dzapps.github.io/OnlineSubtitleTools/
 
 Need help!
 Hi, I'm not really familar with Javascript and front-end design.
